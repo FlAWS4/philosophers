@@ -6,7 +6,7 @@
 /*   By: my42 <my42@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/17 21:12:05 by mshariar          #+#    #+#             */
-/*   Updated: 2025/03/20 13:56:06 by my42             ###   ########.fr       */
+/*   Updated: 2025/03/20 14:23:17 by my42             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,6 @@ bool check_if_simulation_should_end(t_data *data)
     {
         current_time = time_since_start(data);
         
-        // LOCK mutex before accessing last_meal_time
         pthread_mutex_lock(&data->meal_mutexes);
         
         // Calculate how long it's been since the philosopher's last meal
@@ -68,7 +67,13 @@ bool check_if_simulation_should_end(t_data *data)
     
     // If all philosophers have eaten enough meals
     if (data->num_of_meals != -1 && finished_eating == data->num_of_philos)
-        return (true);
+    {
+        pthread_mutex_lock(&data->print_mutex);
+        printf("All philosophers have eaten %d times, simulation complete.\n", 
+               data->num_of_meals);
+        pthread_mutex_unlock(&data->print_mutex);
+        return (true); // This will set simulation_end to true
+    }
     
     return (false);
 }
