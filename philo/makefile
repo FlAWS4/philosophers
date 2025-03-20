@@ -16,7 +16,7 @@ INCLUDES = -I./includes
 OBJS_DIR = objs/
 OBJS = $(addprefix $(OBJS_DIR), $(SRC_FILES:.c=.o))
 
-RM = rm -f
+RM = rm -rf
 
 all: $(NAME)
 
