@@ -3,13 +3,12 @@
 /*                                                        :::      ::::::::   */
 /*   philo.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: my42 <my42@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: mshariar <mshariar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/17 21:12:52 by mshariar          #+#    #+#             */
-/*   Updated: 2025/03/20 14:13:45 by my42             ###   ########.fr       */
+/*   Updated: 2025/03/20 16:00:32 by mshariar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-
 
 #ifndef PHILO_H
 # define PHILO_H
@@ -34,7 +33,6 @@ typedef struct s_fork
 	int				id;
 	pthread_mutex_t	mutex;
 }	t_fork;
-
 
 typedef struct s_philo
 {
@@ -61,6 +59,7 @@ typedef struct s_data
 	pthread_mutex_t	print_mutex;
 	pthread_mutex_t	end_mutex;
 	pthread_mutex_t	meal_mutexes;
+	pthread_t monitor_thread;
 }					t_data;
 
 // init.c

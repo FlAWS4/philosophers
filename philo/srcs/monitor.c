@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   monitor.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: my42 <my42@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: mshariar <mshariar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/17 21:12:05 by mshariar          #+#    #+#             */
-/*   Updated: 2025/03/20 14:23:17 by my42             ###   ########.fr       */
+/*   Updated: 2025/03/20 15:18:25 by mshariar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,10 +44,8 @@ bool check_if_simulation_should_end(t_data *data)
         current_time = time_since_start(data);
         
         pthread_mutex_lock(&data->meal_mutexes);
-        
         // Calculate how long it's been since the philosopher's last meal
         time_since_last_meal = current_time - data->philos[i].last_meal_time;
-        
         // Check if philosopher has died
         if (time_since_last_meal >= data->time_to_die)
         {
@@ -55,16 +53,13 @@ bool check_if_simulation_should_end(t_data *data)
             pthread_mutex_unlock(&data->meal_mutexes);
             return (true);
         }
-        
         // Check if philosopher has eaten enough meals
         if (data->num_of_meals != -1 && 
             data->philos[i].meals_eaten >= data->num_of_meals)
-            finished_eating++;
-            
+            finished_eating++;   
         pthread_mutex_unlock(&data->meal_mutexes);
         i++;
     }
-    
     // If all philosophers have eaten enough meals
     if (data->num_of_meals != -1 && finished_eating == data->num_of_philos)
     {
@@ -74,7 +69,6 @@ bool check_if_simulation_should_end(t_data *data)
         pthread_mutex_unlock(&data->print_mutex);
         return (true); // This will set simulation_end to true
     }
-    
     return (false);
 }
 
