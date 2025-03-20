@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mshariar <mshariar@student.42.fr>          +#+  +:+       +#+        */
+/*   By: my42 <my42@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/17 20:43:00 by mshariar          #+#    #+#             */
-/*   Updated: 2025/03/17 20:43:06 by mshariar         ###   ########.fr       */
+/*   Updated: 2025/03/20 13:24:20 by my42             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,12 +16,12 @@ int	free_resources(t_data *data)
 {
 	int	i;
 
-	if (data->philosophers)
-		free(data->philosophers);
+	if (data->philos)
+		free(data->philos);
 	if (data->forks)
 	{
 		i = 0;
-		while (i < data->num_philos)
+		while (i < data->num_of_philos)
 		{
 			pthread_mutex_destroy(&data->forks[i].mutex);
 			i++;

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   philo.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mshariar <mshariar@student.42.fr>          +#+  +:+       +#+        */
+/*   By: my42 <my42@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/17 21:12:52 by mshariar          #+#    #+#             */
-/*   Updated: 2025/03/17 21:18:32 by mshariar         ###   ########.fr       */
+/*   Updated: 2025/03/20 14:13:45 by my42             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,14 +49,14 @@ typedef struct s_philo
 
 typedef struct s_data
 {
-	int				num_philos;
+	int				num_of_philos;
 	int				time_to_die;
 	int				time_to_eat;
 	int				time_to_sleep;
 	int				num_of_meals;
 	long long		start_time;
 	bool			simulation_end;
-	t_philo			*philosophers;
+	t_philo			*philos;
 	t_fork			*forks;
 	pthread_mutex_t	print_mutex;
 	pthread_mutex_t	end_mutex;
@@ -75,7 +75,7 @@ int			start_simulation(t_data *data);
 void		join_philosophers(t_data *data);
 
 // actions.c
-void		take_forks(t_philo *philo);
+bool		take_forks(t_philo *philo);
 void		eat(t_philo *philo);
 void		sleep_think(t_philo *philo);
 

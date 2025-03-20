@@ -8,7 +8,7 @@ SRC_FILES = main.c \
 		utils.c \
 		init.c \
 		monitor.c \
-		actions.c \
+		action.c 
 SRCS = $(addprefix $(SRC_DIR), $(SRC_FILES))
 
 INCLUDES = -I./includes
