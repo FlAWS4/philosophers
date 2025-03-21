@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   philo.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mshariar <mshariar@student.42.fr>          +#+  +:+       +#+        */
+/*   By: my42 <my42@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/17 21:12:52 by mshariar          #+#    #+#             */
-/*   Updated: 2025/03/20 16:00:32 by mshariar         ###   ########.fr       */
+/*   Updated: 2025/03/21 15:59:44 by my42             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,7 +92,7 @@ bool		parse_args(int argc, char **argv, t_data *data);
 
 // time.c
 long long	get_time_in_ms(void);
-void		custom_sleep(long long time);
+void 		custom_sleep(int milliseconds);
 long long	time_since_start(t_data *data);
 void		update_last_meal(t_philo *philo);
 long long	get_last_meal_time(t_philo *philo);

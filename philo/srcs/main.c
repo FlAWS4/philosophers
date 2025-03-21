@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mshariar <mshariar@student.42.fr>          +#+  +:+       +#+        */
+/*   By: my42 <my42@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/17 20:43:00 by mshariar          #+#    #+#             */
-/*   Updated: 2025/03/20 15:16:48 by mshariar         ###   ########.fr       */
+/*   Updated: 2025/03/21 16:21:39 by my42             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,23 +34,27 @@ int	free_resources(t_data *data)
 	return (0);
 }
 
-int	main(int argc, char **argv)
+int main(int argc, char **argv)
 {
-	t_data	data;
+    t_data data;
 
-	memset(&data, 0, sizeof(t_data));
-	if (argc != 5 && argc != 6)
-		return (error_exit("Invalid number of arguments"));
-	if (!parse_args(argc, argv, &data))
-		return (error_exit("Invalid arguments"));
-	if (init_data(&data, argc, argv) != 0)
-		return (error_exit("Initialization error"));
-	if (start_simulation(&data) != 0)
-	{
-		free_resources(&data);
-		return (error_exit("Failed to start simulation"));
-	}
-	join_philosophers(&data);
-	free_resources(&data);
-	return (0);
+    memset(&data, 0, sizeof(t_data));
+    if (argc != 5 && argc != 6)
+        return (error_exit("Invalid number of arguments"));
+    if (!parse_args(argc, argv, &data))
+        return (error_exit("Invalid arguments"));
+    if (init_data(&data, argc, argv) != 0)
+        return (error_exit("Initialization error"));
+    if (start_simulation(&data) != 0)
+    {
+        free_resources(&data);
+        return (error_exit("Failed to start simulation"));
+    }
+    join_philosophers(&data);
+    
+    // Small delay to ensure cleanup is complete
+    usleep(1000);
+    
+    free_resources(&data);
+    return (0);
 }

@@ -6,7 +6,7 @@
 /*   By: my42 <my42@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/17 21:12:30 by mshariar          #+#    #+#             */
-/*   Updated: 2025/03/20 13:52:28 by my42             ###   ########.fr       */
+/*   Updated: 2025/03/21 16:24:26 by my42             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,6 @@ bool parse_args(int argc, char **argv, t_data *data)
     int i;
     int value;
     
-    (void)data;
     i = 1;
     while (i < argc)
     {
@@ -73,14 +72,32 @@ bool parse_args(int argc, char **argv, t_data *data)
         if (value <= 0)
             return (false);
         
-        if (i == 1 && value > 200)
-            return (false);
+        // Store values directly in data structure as we parse them
+        if (i == 1)
+        {
+            if (value > 200)
+                return (false);
+            data->num_of_philos = value;
+        }
+        else if (i == 2)
+            data->time_to_die = value;
+        else if (i == 3)
+            data->time_to_eat = value;
+        else if (i == 4)
+            data->time_to_sleep = value;
+        else if (i == 5)
+            data->num_of_meals = value;
         
         i++;
     }
     
+    // If num_of_meals wasn't provided, set it to -1 (unlimited)
+    if (argc == 5)
+        data->num_of_meals = -1;
+    
     return (true);
 }
+
 long long get_time_in_ms(void)
 {
     struct timeval tv;
@@ -88,14 +105,16 @@ long long get_time_in_ms(void)
     gettimeofday(&tv, NULL);
     return ((tv.tv_sec * 1000) + (tv.tv_usec / 1000));
 }
-
-void custom_sleep(long long time)
+void custom_sleep(int milliseconds)
 {
-    long long start;
+    long long start_time;
     
-    start = get_time_in_ms();
-    while (get_time_in_ms() - start < time)
-        usleep(100);
+    start_time = get_time_in_ms();
+    while ((get_time_in_ms() - start_time) < milliseconds)
+    {
+        // More efficient sleep for smaller intervals
+        usleep(500);
+    }
 }
 
 long long time_since_start(t_data *data)

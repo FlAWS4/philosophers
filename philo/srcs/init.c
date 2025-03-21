@@ -6,7 +6,7 @@
 /*   By: my42 <my42@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/17 21:12:01 by mshariar          #+#    #+#             */
-/*   Updated: 2025/03/20 13:21:55 by my42             ###   ########.fr       */
+/*   Updated: 2025/03/21 16:25:14 by my42             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,10 +81,22 @@ int init_philosophers(t_data *data)
     {
         data->philos[i].id = i + 1;
         data->philos[i].meals_eaten = 0;
-        data->philos[i].last_meal_time = 0;
+        // Don't initialize last_meal_time here
+        data->philos[i].last_meal_time = 0; // Will be properly set at simulation start
         data->philos[i].data = data;
-        data->philos[i].left_fork = &data->forks[i];
-        data->philos[i].right_fork = &data->forks[(i + 1) % data->num_of_philos];
+        
+        // For large numbers of philosophers, assign forks differently to odd/even
+        // to break symmetry and reduce deadlocks
+        if (data->num_of_philos > 100 && (i + 1) % 2)
+        {
+            data->philos[i].left_fork = &data->forks[(i + 1) % data->num_of_philos];
+            data->philos[i].right_fork = &data->forks[i];
+        }
+        else
+        {
+            data->philos[i].left_fork = &data->forks[i];
+            data->philos[i].right_fork = &data->forks[(i + 1) % data->num_of_philos];
+        }
         i++;
     }
     
