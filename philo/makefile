@@ -29,9 +29,11 @@ $(OBJS_DIR)%.o: $(SRC_DIR)%.c
 
 clean:
 	$(RM) $(OBJS)
+	$(RM) $(OBJS_DIR)
 
 fclean: clean
 	$(RM) $(NAME)
+	$(RM) $(OBJS_DIR)
 
 re: fclean all
 

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: my42 <my42@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: mshariar <mshariar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/17 20:43:00 by mshariar          #+#    #+#             */
-/*   Updated: 2025/03/21 16:21:39 by my42             ###   ########.fr       */
+/*   Updated: 2025/03/21 21:26:40 by mshariar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,8 +51,6 @@ int main(int argc, char **argv)
         return (error_exit("Failed to start simulation"));
     }
     join_philosophers(&data);
-    
-    // Small delay to ensure cleanup is complete
     usleep(1000);
     
     free_resources(&data);

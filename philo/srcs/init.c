@@ -6,7 +6,7 @@
 /*   By: mshariar <mshariar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/17 21:12:01 by mshariar          #+#    #+#             */
-/*   Updated: 2025/03/21 18:03:29 by mshariar         ###   ########.fr       */
+/*   Updated: 2025/03/21 22:48:32 by mshariar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,20 +72,16 @@ int init_philosophers(t_data *data)
 {
     int i;
     
-    data->philos = malloc(sizeof(t_philo) * data->num_of_philos);
+    data->philos = malloc(sizeof(t_philo) * data->num_of_philos); //faudrait rajouter un memset(&data->philos, 0, sizeof(t_philo) * data->num_of_philos); apres le malloc en bas
     if (!data->philos)
         return (1);
-    
     i = 0;
     while (i < data->num_of_philos)
     {
         data->philos[i].id = i + 1;
         data->philos[i].meals_eaten = 0;
-        // Only placeholder initialization - actual time set at simulation start
         data->philos[i].last_meal_time = 0;
         data->philos[i].data = data;
-        
-        // Fork assignment logic stays the same
         if (data->num_of_philos > 100 && (i + 1) % 2)
         {
             data->philos[i].left_fork = &data->forks[(i + 1) % data->num_of_philos];
@@ -98,7 +94,6 @@ int init_philosophers(t_data *data)
         }
         i++;
     }
-    
     return (0);
 }
 

@@ -6,7 +6,7 @@
 /*   By: mshariar <mshariar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/17 21:12:52 by mshariar          #+#    #+#             */
-/*   Updated: 2025/03/21 18:07:49 by mshariar         ###   ########.fr       */
+/*   Updated: 2025/03/21 22:37:19 by mshariar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,7 @@ typedef struct s_data
 	pthread_mutex_t	print_mutex;
 	pthread_mutex_t	end_mutex;
 	pthread_mutex_t	meal_mutexes;
-	pthread_t monitor_thread;
+	pthread_t 		monitor_thread;
 }					t_data;
 
 // init.c
