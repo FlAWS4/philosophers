@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   philosophers.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: my42 <my42@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: mshariar <mshariar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/17 21:12:11 by mshariar          #+#    #+#             */
-/*   Updated: 2025/03/21 16:38:21 by my42             ###   ########.fr       */
+/*   Updated: 2025/03/21 17:59:46 by mshariar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,11 +18,8 @@ void *philosopher_routine(void *arg)
     
     philo = (t_philo *)arg;
     
-    // Set initial last meal time for all philosophers
-    pthread_mutex_lock(&philo->data->meal_mutexes);
-    // Give all philosophers a head start relative to their ID
-    philo->last_meal_time = time_since_start(philo->data);
-    pthread_mutex_unlock(&philo->data->meal_mutexes);
+    // NO NEED to set last_meal_time here - already set in start_simulation
+    // This avoids the double initialization problem
     
     // Stagger start times to avoid all philosophers trying to eat at once
     if (philo->data->num_of_philos > 100)
@@ -50,7 +47,7 @@ void *philosopher_routine(void *arg)
             continue;
         }
         
-        // Eat (meal time is updated in take_forks before returning true)
+        // Eat (meal time is updated INSIDE the eat() function, not in take_forks)
         eat(philo);
         
         // Check meal limit after eating
@@ -75,7 +72,6 @@ void *philosopher_routine(void *arg)
     return (NULL);
 }
 
-// Add this function to properly set up the simulation before starting
 int start_simulation(t_data *data)
 {
     int i;
@@ -89,17 +85,13 @@ int start_simulation(t_data *data)
     while (i < data->num_of_philos)
     {
         pthread_mutex_lock(&data->meal_mutexes);
-        data->philos[i].last_meal_time = 0; // 0 milliseconds since start
+        // Set to current time instead of 0 to give philosophers proper time to start
+        data->philos[i].last_meal_time = time_since_start(data);
         pthread_mutex_unlock(&data->meal_mutexes);
         i++;
     }
     
-    // Create the monitor thread
-    if (pthread_create(&monitor, NULL, &monitor_routine, data) != 0)
-        return (1);
-    pthread_detach(monitor);
-    
-    // Start philosopher threads
+    // Start philosopher threads FIRST
     i = 0;
     while (i < data->num_of_philos)
     {
@@ -109,13 +101,13 @@ int start_simulation(t_data *data)
         i++;
     }
     
-    // REMOVE THIS SECTION - joining is done in join_philosophers
-    // i = 0;
-    // while (i < data->num_of_philos)
-    // {
-    //     pthread_join(data->philos[i].thread, NULL);
-    //     i++;
-    // }
+    // Small delay to let philosophers start before monitoring
+    usleep(1000);
+    
+    // Create the monitor thread AFTER philosophers have started
+    if (pthread_create(&monitor, NULL, &monitor_routine, data) != 0)
+        return (1);
+    pthread_detach(monitor);
     
     return (0);
 }

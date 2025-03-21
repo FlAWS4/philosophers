@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   philo.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: my42 <my42@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: mshariar <mshariar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/17 21:12:52 by mshariar          #+#    #+#             */
-/*   Updated: 2025/03/21 15:59:44 by my42             ###   ########.fr       */
+/*   Updated: 2025/03/21 18:07:49 by mshariar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,6 +88,7 @@ void		set_simulation_end(t_data *data);
 int			ft_atoi(const char *str);
 int			error_exit(char *msg);
 void		print_status(t_philo *philo, char *status);
+bool 		ft_isdigit(char c);
 bool		parse_args(int argc, char **argv, t_data *data);
 
 // time.c

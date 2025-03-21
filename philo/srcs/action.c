@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   action.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: my42 <my42@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: mshariar <mshariar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/17 21:11:58 by mshariar          #+#    #+#             */
-/*   Updated: 2025/03/21 16:30:24 by my42             ###   ########.fr       */
+/*   Updated: 2025/03/21 17:56:21 by mshariar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,19 +68,15 @@ bool take_forks(t_philo *philo)
         return (false);
     }
     
-    // Update meal time IMMEDIATELY after getting both forks
-    pthread_mutex_lock(&philo->data->meal_mutexes);
-    philo->last_meal_time = time_since_start(philo->data);
-    pthread_mutex_unlock(&philo->data->meal_mutexes);
-    
+    // Do NOT update meal time here - moved to eat() function
     return (true);
 }
-// Modify eat function to prioritize philosopher 1's meal timing
+
 void eat(t_philo *philo)
 {
     // CRITICAL SECTION: Update meal time at the start of eating
+    // This is now the ONLY place where last_meal_time is updated
     pthread_mutex_lock(&philo->data->meal_mutexes);
-    // Ensure philosopher 1 gets immediate meal time update
     philo->last_meal_time = time_since_start(philo->data);
     pthread_mutex_unlock(&philo->data->meal_mutexes);
     
