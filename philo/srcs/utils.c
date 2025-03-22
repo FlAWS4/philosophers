@@ -6,7 +6,7 @@
 /*   By: mshariar <mshariar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/17 21:12:30 by mshariar          #+#    #+#             */
-/*   Updated: 2025/03/21 23:00:27 by mshariar         ###   ########.fr       */
+/*   Updated: 2025/03/22 13:58:00 by mshariar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,8 +62,19 @@ void	print_status(t_philo *philo, char *status)
 
 static bool	validate_arg_value(char **argv, int i, int value, t_data *data)
 {
-    if (!argv[i][0] || !ft_isdigit(argv[i][0]) || value <= 0)
+    int	j;
+
+    if (!argv[i][0] || value <= 0)
         return (false);
+    
+    j = 0;
+    while (argv[i][j])
+    {
+        if (!ft_isdigit(argv[i][j]))
+            return (false);
+        j++;
+    }
+    
     if (i == 1)
     {
         if (value > 200)
@@ -97,62 +108,6 @@ bool	parse_args(int argc, char **argv, t_data *data)
     if (argc == 5)
         data->num_of_meals = -1;
     return (true);
-}
-
-long long	get_time_in_ms(void)
-{
-    struct timeval	tv;
-
-    if (gettimeofday(&tv, NULL) != 0)
-        return (0);
-    return ((tv.tv_sec * 1000) + (tv.tv_usec / 1000)); // pour enlever les long long, il faut cast ce retour en size_t = return ((size_t)((tv.tv_sec * 1000) + (tv.tv_usec / 1000));
-}
-
-void	custom_sleep(int milliseconds)
-{
-    long long	start_time;
-    long long	elapsed;
-    long long	remaining;
-
-    start_time = get_time_in_ms();              
-    while (1)
-    {
-        elapsed = get_time_in_ms() - start_time;
-        if (elapsed >= milliseconds)
-            break ;
-        remaining = milliseconds - elapsed;
-        if (remaining > 10)
-            usleep(remaining * 800);
-        else
-            usleep(200);
-    }
-}
-
-long long	time_since_start(t_data *data)
-{
-    return (get_time_in_ms() - data->start_time);
-}
-
-void	update_last_meal(t_philo *philo)
-{
-    long long	current;
-
-    pthread_mutex_lock(&philo->data->meal_mutexes);
-    current = time_since_start(philo->data);
-    if (current == 0)
-        current = 1;
-    philo->last_meal_time = current;
-    pthread_mutex_unlock(&philo->data->meal_mutexes);
-}
-
-long long	get_last_meal_time(t_philo *philo)
-{
-    long long	time;
-
-    pthread_mutex_lock(&philo->data->meal_mutexes);
-    time = philo->last_meal_time;
-    pthread_mutex_unlock(&philo->data->meal_mutexes);
-    return (time);
 }
 
 bool	ft_isdigit(char c)

@@ -6,7 +6,7 @@
 /*   By: mshariar <mshariar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/17 21:11:58 by mshariar          #+#    #+#             */
-/*   Updated: 2025/03/21 23:01:00 by mshariar         ###   ########.fr       */
+/*   Updated: 2025/03/22 13:48:30 by mshariar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,71 +20,74 @@ static bool	handle_single_philo(t_philo *philo)
     return (false);
 }
 
-static bool	take_left_first(t_philo *philo)
+static bool take_forks_in_order(t_philo *philo, t_fork *first, t_fork *second)
 {
-    pthread_mutex_lock(&philo->left_fork->mutex);
+    bool is_single_philo;
+    
+    pthread_mutex_lock(&philo->data->data_mutex);
+    is_single_philo = (philo->data->num_of_philos == 1);
+    pthread_mutex_unlock(&philo->data->data_mutex);
+    
+    pthread_mutex_lock(&first->mutex);
+    print_status(philo, FORK);
+    
+    if (get_simulation_end(philo->data))
+    {
+        pthread_mutex_unlock(&first->mutex);
+        return (false);
+    }
+    if (is_single_philo)
+        return (handle_single_philo(philo));  
+    pthread_mutex_lock(&second->mutex);
     print_status(philo, FORK);
     if (get_simulation_end(philo->data))
     {
-        pthread_mutex_unlock(&philo->left_fork->mutex);
+        pthread_mutex_unlock(&first->mutex);
+        pthread_mutex_unlock(&second->mutex);
         return (false);
     }
-    if (philo->data->num_of_philos == 1)
-        return (handle_single_philo(philo));
-    pthread_mutex_lock(&philo->right_fork->mutex);
-    print_status(philo, FORK);
     return (true);
 }
 
-static bool	take_right_first(t_philo *philo)
+bool take_forks(t_philo *philo)
 {
-    pthread_mutex_lock(&philo->right_fork->mutex);
-    print_status(philo, FORK);
+    t_fork *first_fork;
+    t_fork *second_fork;
+    
     if (get_simulation_end(philo->data))
+        return (false);
+    
+    // Always take lowest ID fork first to prevent deadlock
+    if (philo->left_fork->id < philo->right_fork->id)
     {
-        pthread_mutex_unlock(&philo->right_fork->mutex);
-        return (false);
+        first_fork = philo->left_fork;
+        second_fork = philo->right_fork;
     }
-    pthread_mutex_lock(&philo->left_fork->mutex);
-    print_status(philo, FORK);
-    return (true);
-}
-
-bool	take_forks(t_philo *philo)
-{
-    long long	time_since_meal;
-    bool		is_urgent;
-    bool		take_left_first_flag;
-    bool		success;
-
-    if (get_simulation_end(philo->data))
-        return (false);
-    time_since_meal = time_since_start(philo->data) - get_last_meal_time(philo);
-    is_urgent = (time_since_meal > philo->data->time_to_die - 100);
-    take_left_first_flag = (philo->id % 2 == 1);
-    if (is_urgent)
-        take_left_first_flag = !(philo->id % 2 == 1);
-    if (take_left_first_flag)
-        success = take_left_first(philo);
     else
-        success = take_right_first(philo);
-    if (!success || get_simulation_end(philo->data))
     {
-        pthread_mutex_unlock(&philo->left_fork->mutex);
-        pthread_mutex_unlock(&philo->right_fork->mutex);
-        return (false);
+        first_fork = philo->right_fork;
+        second_fork = philo->left_fork;
     }
-    return (true);
+    
+    return (take_forks_in_order(philo, first_fork, second_fork));
 }
 
 void	eat(t_philo *philo)
 {
+    long time_to_eat;
+    
+    pthread_mutex_lock(&philo->data->data_mutex);
+    time_to_eat = philo->data->time_to_eat;
+    pthread_mutex_unlock(&philo->data->data_mutex);
+    
     update_last_meal(philo);
     print_status(philo, EATING);
-    custom_sleep(philo->data->time_to_eat);
-    pthread_mutex_lock(&philo->data->meal_mutexes);
+    custom_sleep(time_to_eat);
+    
+    pthread_mutex_lock(&philo->data->meal_mutex);
     philo->meals_eaten++;
-    pthread_mutex_unlock(&philo->data->meal_mutexes);
+    pthread_mutex_unlock(&philo->data->meal_mutex);
+    
     pthread_mutex_unlock(&philo->left_fork->mutex);
     pthread_mutex_unlock(&philo->right_fork->mutex);
 }
@@ -92,13 +95,22 @@ void	eat(t_philo *philo)
 void	sleep_think(t_philo *philo)
 {
     long long	time_since_meal;
+    long		time_to_sleep;
+    long		time_to_die;
     bool		is_urgent;
 
+    pthread_mutex_lock(&philo->data->data_mutex);
+    time_to_sleep = philo->data->time_to_sleep;
+    time_to_die = philo->data->time_to_die;
+    pthread_mutex_unlock(&philo->data->data_mutex);
+    
     print_status(philo, SLEEPING);
-    custom_sleep(philo->data->time_to_sleep);
+    custom_sleep(time_to_sleep);
     print_status(philo, THINKING);
+    
     time_since_meal = time_since_start(philo->data) - get_last_meal_time(philo);
-    is_urgent = (time_since_meal > philo->data->time_to_die - 150);                 //pareil ici
+    is_urgent = (time_since_meal > time_to_die - 150);
+    
     if (!is_urgent && philo->id % 2 == 0)
         custom_sleep(5);
 }

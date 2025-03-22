@@ -6,7 +6,7 @@
 /*   By: mshariar <mshariar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/17 21:12:01 by mshariar          #+#    #+#             */
-/*   Updated: 2025/03/21 22:48:32 by mshariar         ###   ########.fr       */
+/*   Updated: 2025/03/22 13:48:37 by mshariar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,9 +42,10 @@ int init_mutexes(t_data *data)
         return (1);
     if (pthread_mutex_init(&data->end_mutex, NULL) != 0)
         return (1);
-    if (pthread_mutex_init(&data->meal_mutexes, NULL) != 0)
+    if (pthread_mutex_init(&data->meal_mutex, NULL) != 0)
         return (1);
-    
+    if (pthread_mutex_init(&data->data_mutex, NULL) != 0)
+        return (1);
     return (0);
 }
 
@@ -72,9 +73,11 @@ int init_philosophers(t_data *data)
 {
     int i;
     
-    data->philos = malloc(sizeof(t_philo) * data->num_of_philos); //faudrait rajouter un memset(&data->philos, 0, sizeof(t_philo) * data->num_of_philos); apres le malloc en bas
+    data->philos = malloc(sizeof(t_philo) * data->num_of_philos);
     if (!data->philos)
         return (1);
+    memset(data->philos, 0, sizeof(t_philo) * data->num_of_philos);
+    
     i = 0;
     while (i < data->num_of_philos)
     {
@@ -82,16 +85,11 @@ int init_philosophers(t_data *data)
         data->philos[i].meals_eaten = 0;
         data->philos[i].last_meal_time = 0;
         data->philos[i].data = data;
-        if (data->num_of_philos > 100 && (i + 1) % 2)
-        {
-            data->philos[i].left_fork = &data->forks[(i + 1) % data->num_of_philos];
-            data->philos[i].right_fork = &data->forks[i];
-        }
-        else
-        {
-            data->philos[i].left_fork = &data->forks[i];
-            data->philos[i].right_fork = &data->forks[(i + 1) % data->num_of_philos];
-        }
+        
+        // Consistent assignment for all philosophers
+        data->philos[i].left_fork = &data->forks[i];
+        data->philos[i].right_fork = &data->forks[(i + 1) % data->num_of_philos];
+        
         i++;
     }
     return (0);
