@@ -6,7 +6,7 @@
 /*   By: mshariar <mshariar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/17 21:12:52 by mshariar          #+#    #+#             */
-/*   Updated: 2025/03/24 17:37:46 by mshariar         ###   ########.fr       */
+/*   Updated: 2025/03/24 17:49:54 by mshariar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,6 +75,9 @@ int			start_simulation(t_data *data);
 void		join_philosophers(t_data *data);
 void	    stagger_start(t_philo *philo);
 bool	    try_acquire_forks(t_philo *philo);
+int            create_threads(t_data *data);
+void	    handle_post_eating(t_philo *philo);
+void        handle_backoff(t_philo *philo, bool is_urgent);
 
 /* Action functions */
 bool		take_forks(t_philo *philo);
@@ -93,6 +96,7 @@ int			error_exit(char *msg);
 void		print_status(t_philo *philo, char *status);
 bool		ft_isdigit(char c);
 bool		parse_args(int argc, char **argv, t_data *data);
+void	    update_urgency(t_philo *philo, bool *is_urgent);
 
 /* Time functions */
 long long	get_time_in_ms(void);
