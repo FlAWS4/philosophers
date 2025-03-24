@@ -6,14 +6,14 @@
 /*   By: mshariar <mshariar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/17 21:12:30 by mshariar          #+#    #+#             */
-/*   Updated: 2025/03/24 16:53:12 by mshariar         ###   ########.fr       */
+/*   Updated: 2025/03/24 17:58:28 by mshariar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/philo.h"
 
 int	ft_atoi(const char *str)
-{
+{   
     int		i;
     int		sign;
     long	result;

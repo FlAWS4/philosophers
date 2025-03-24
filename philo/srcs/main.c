@@ -6,13 +6,13 @@
 /*   By: mshariar <mshariar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/17 20:43:00 by mshariar          #+#    #+#             */
-/*   Updated: 2025/03/24 17:15:01 by mshariar         ###   ########.fr       */
+/*   Updated: 2025/03/24 18:00:37 by mshariar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/philo.h"
 
-int start_simulation(t_data *data)
+int	start_simulation(t_data *data)
 {
 	data->start_time = get_time_in_ms();
 	init_meal_times(data);
