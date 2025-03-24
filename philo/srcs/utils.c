@@ -6,7 +6,7 @@
 /*   By: mshariar <mshariar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/17 21:12:30 by mshariar          #+#    #+#             */
-/*   Updated: 2025/03/22 13:58:00 by mshariar         ###   ########.fr       */
+/*   Updated: 2025/03/24 16:53:12 by mshariar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,12 +41,6 @@ int	ft_atoi(const char *str)
     return (result * sign);
 }
 
-int	error_exit(char *msg)
-{
-    printf("Error: %s\n", msg);
-    return (1);
-}
-
 void	print_status(t_philo *philo, char *status)
 {
     long long	current_time;
@@ -79,7 +73,7 @@ static bool	validate_arg_value(char **argv, int i, int value, t_data *data)
     {
         if (value > 200)
             return (false);
-        data->num_of_philos = value;
+        data->philos_nb = value;
     }
     else if (i == 2)
         data->time_to_die = value;

@@ -6,7 +6,7 @@
 /*   By: mshariar <mshariar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/17 21:12:52 by mshariar          #+#    #+#             */
-/*   Updated: 2025/03/22 13:48:06 by mshariar         ###   ########.fr       */
+/*   Updated: 2025/03/24 17:37:46 by mshariar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ typedef struct s_philo
 
 typedef struct s_data
 {
-    int				num_of_philos;
+    int				philos_nb;
     int				time_to_die;
     int				time_to_eat;
     int				time_to_sleep;
@@ -73,6 +73,8 @@ int			init_forks(t_data *data);
 void		*philosopher_routine(void *arg);
 int			start_simulation(t_data *data);
 void		join_philosophers(t_data *data);
+void	    stagger_start(t_philo *philo);
+bool	    try_acquire_forks(t_philo *philo);
 
 /* Action functions */
 bool		take_forks(t_philo *philo);
@@ -98,5 +100,6 @@ void		custom_sleep(int milliseconds);
 long long	time_since_start(t_data *data);
 void		update_last_meal(t_philo *philo);
 long long	get_last_meal_time(t_philo *philo);
+void	    init_meal_times(t_data *data);
 
 #endif
