@@ -6,7 +6,7 @@
 /*   By: mshariar <mshariar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/22 13:50:54 by mshariar          #+#    #+#             */
-/*   Updated: 2025/03/24 17:57:01 by mshariar         ###   ########.fr       */
+/*   Updated: 2025/03/25 17:23:02 by mshariar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ long long	get_time_in_ms(void)
 	return ((tv.tv_sec * 1000) + (tv.tv_usec / 1000));
 }
 
-void	custom_sleep(int milliseconds)
+void	custom_sleep(int milliseconds, t_data *data)
 {
 	long long	start_time;
 	long long	elapsed;
@@ -30,12 +30,16 @@ void	custom_sleep(int milliseconds)
 	start_time = get_time_in_ms();
 	while (1)
 	{
+		if (get_simulation_end(data))
+			return ;
 		elapsed = get_time_in_ms() - start_time;
 		if (elapsed >= milliseconds)
 			break ;
 		remaining = milliseconds - elapsed;
-		if (remaining > 10)
-			usleep(remaining * 800);
+		if (remaining > 100)
+			usleep(50000);
+		else if (remaining > 10)
+			usleep(5000);
 		else
 			usleep(200);
 	}

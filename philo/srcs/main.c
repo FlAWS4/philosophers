@@ -6,7 +6,7 @@
 /*   By: mshariar <mshariar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/17 20:43:00 by mshariar          #+#    #+#             */
-/*   Updated: 2025/03/24 18:00:37 by mshariar         ###   ########.fr       */
+/*   Updated: 2025/03/25 17:25:15 by mshariar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,11 +79,10 @@ int	main(int argc, char **argv)
 		free_resources(&data);
 		return (error_exit("Failed to start simulation"));
 	}
+	while (!get_simulation_end(&data))
+		usleep(1000);
+	usleep(5000);
 	join_philosophers(&data);
-	pthread_mutex_lock(&data.end_mutex);
-	data.simulation_end = true;
-	pthread_mutex_unlock(&data.end_mutex);
-	usleep(1000);
 	free_resources(&data);
 	return (0);
 }

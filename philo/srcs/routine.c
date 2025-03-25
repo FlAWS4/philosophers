@@ -6,7 +6,7 @@
 /*   By: mshariar <mshariar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/24 17:15:43 by mshariar          #+#    #+#             */
-/*   Updated: 2025/03/24 17:44:11 by mshariar         ###   ########.fr       */
+/*   Updated: 2025/03/25 17:04:30 by mshariar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,12 +75,12 @@ void	stagger_start(t_philo *philo)
 	if (num_philos > 100)
 	{
 		if (philo->id % 2 == 0)
-			custom_sleep(time_to_eat / 2);
+			custom_sleep(time_to_eat / 2, philo->data);
 		else
-			custom_sleep((philo->id % 10) * 5);
+			custom_sleep((philo->id % 10) * 5, philo->data);
 	}
 	else if (philo->id % 2 == 0)
-		custom_sleep(10);
+		custom_sleep(10, philo->data);
 }
 
 void	*philosopher_routine(void *arg)

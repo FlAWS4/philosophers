@@ -6,7 +6,7 @@
 /*   By: mshariar <mshariar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/17 21:11:58 by mshariar          #+#    #+#             */
-/*   Updated: 2025/03/24 16:52:57 by mshariar         ###   ########.fr       */
+/*   Updated: 2025/03/25 17:05:19 by mshariar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,7 +76,7 @@ void	eat(t_philo *philo)
 	pthread_mutex_unlock(&philo->data->data_mutex);
 	update_last_meal(philo);
 	print_status(philo, EATING);
-	custom_sleep(time_to_eat);
+	custom_sleep(time_to_eat, philo->data);
 	pthread_mutex_lock(&philo->data->meal_mutex);
 	philo->meals_eaten++;
 	pthread_mutex_unlock(&philo->data->meal_mutex);
@@ -96,10 +96,10 @@ void	sleep_think(t_philo *philo)
 	time_to_die = philo->data->time_to_die;
 	pthread_mutex_unlock(&philo->data->data_mutex);
 	print_status(philo, SLEEPING);
-	custom_sleep(time_to_sleep);
+	custom_sleep(time_to_sleep, philo->data);
 	print_status(philo, THINKING);
 	time_since_meal = time_since_start(philo->data) - get_last_meal_time(philo);
 	is_urgent = (time_since_meal > time_to_die - 150);
 	if (!is_urgent && philo->id % 2 == 0)
-		custom_sleep(5);
+		custom_sleep(5, philo->data);
 }
