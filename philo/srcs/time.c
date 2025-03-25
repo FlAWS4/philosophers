@@ -6,7 +6,7 @@
 /*   By: mshariar <mshariar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/22 13:50:54 by mshariar          #+#    #+#             */
-/*   Updated: 2025/03/25 17:23:02 by mshariar         ###   ########.fr       */
+/*   Updated: 2025/03/25 17:55:29 by mshariar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,14 @@ void	custom_sleep(int milliseconds, t_data *data)
 
 long long	time_since_start(t_data *data)
 {
-	return (get_time_in_ms() - data->start_time);
+	long long	current_time;
+	long long	start_time;
+
+	start_time = get_time_in_ms();
+	pthread_mutex_lock(&data->data_mutex);
+	current_time = data->start_time;;
+	pthread_mutex_unlock(&data->data_mutex);
+	return (start_time - current_time);
 }
 
 void	update_last_meal(t_philo *philo)
